@@ -1,4 +1,4 @@
-# 📚 LibraryFlow
+# Smart Crowd Management System
 
 A comprehensive smart crowd management system that provides real-time occupancy tracking, QR code-based entry/exit logging, predictive analytics, and administrative controls for modern facilities.
 
