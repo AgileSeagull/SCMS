@@ -2,7 +2,7 @@
 
 A comprehensive smart crowd management system that provides real-time occupancy tracking, QR code-based entry/exit logging, predictive analytics, and administrative controls for modern facilities.
 
-![LibraryFlow](https://img.shields.io/badge/LibraryFlow-v1.0.0-blue)
+![SCMS](https://img.shields.io/badge/SCMS-v1.0.0-blue)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-blue)
 ![React](https://img.shields.io/badge/React-19.2.0-blue)
 ![Node.js](https://img.shields.io/badge/Node.js-Express-green)
@@ -58,7 +58,7 @@ A comprehensive smart crowd management system that provides real-time occupancy 
 ## 🏗️ **Architecture**
 
 ```
-LibraryFlow/
+SCMS/
 ├── backend/                # Node.js + Express API
 │   ├── src/
 │   │   ├── controllers/    # API route handlers
@@ -90,8 +90,8 @@ LibraryFlow/
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/yourusername/libraryflow.git
-cd libraryflow
+git clone https://github.com/AgileSeagull/SCMS.git
+cd SCMS
 ```
 
 ### 2. Backend Setup
@@ -155,7 +155,7 @@ The application uses SQLite by default. To use PostgreSQL:
 
 1. Update `DATABASE_URL` in `.env`:
 ```env
-DATABASE_URL="postgresql://user:password@localhost:5432/libraryflow"
+DATABASE_URL="postgresql://user:password@localhost:5432/SCMS"
 ```
 
 2. Update provider in `prisma/schema.prisma`:
@@ -173,7 +173,7 @@ npx prisma migrate deploy
 
 ## 📊 **Database Scripts**
 
-LibraryFlow includes several utility scripts for managing test data and database state. All scripts are run from the `backend` directory.
+SCMS includes several utility scripts for managing test data and database state. All scripts are run from the `backend` directory.
 
 ### 1. Populate Database (`db:populate`)
 
@@ -297,7 +297,7 @@ npm run db:seed
 
 ## 🚦 **Service Management Scripts**
 
-LibraryFlow includes convenient scripts for managing backend and frontend services.
+SCMS includes convenient scripts for managing backend and frontend services.
 
 ### Start Services (`start.sh`)
 
@@ -442,7 +442,7 @@ npx prisma studio
 
 ## 🧠 **Predictive Analytics**
 
-LibraryFlow includes a sophisticated **Holt-Winters Exponential Smoothing Model** for predicting future occupancy.
+SCMS includes a sophisticated **Holt-Winters Exponential Smoothing Model** for predicting future occupancy.
 
 ### Features
 - **Forecast Horizon**: 10-60 minutes ahead
@@ -515,37 +515,6 @@ npm run build
 3. Set secure JWT secret (strong random string)
 4. Configure CORS for production domain
 5. Use environment variables for all secrets
-
-### Docker Deployment (Optional)
-```dockerfile
-# Example Dockerfile structure
-FROM node:18-alpine
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
-RUN npm run build
-EXPOSE 5000
-CMD ["npm", "start"]
-```
-
-## 🤝 **Contributing**
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-### Development Guidelines
-- Follow TypeScript best practices
-- Write meaningful commit messages
-- Update documentation for new features
-- Test thoroughly before submitting PRs
-
-## 📄 **License**
-
-This project is licensed under the ISC License.
 
 ## 🙏 **Acknowledgments**
 
