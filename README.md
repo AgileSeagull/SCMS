@@ -9,6 +9,9 @@ A comprehensive smart crowd management system that provides real-time occupancy 
 ![Database](https://img.shields.io/badge/Database-SQLite-orange)
 ![Status](https://img.shields.io/badge/Status-Production%20Ready-brightgreen)
 
+## ▶️ Product Demo
+[Video Link](https://drive.google.com/file/d/1mVtha9cgA0O9XVpy8bBFqZJo_XGIkq83/view?usp=drive_link)
+
 ## 📑 Table of Contents
 
 -   [Features](#-features)
