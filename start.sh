@@ -3,6 +3,9 @@
 # LibraryFlow Start Script
 # This script starts both backend and frontend services
 
+# Resolve script directory once (must be done before any cd)
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
 echo "🚀 Starting LibraryFlow Services..."
 echo ""
 
@@ -55,7 +58,6 @@ echo ""
 # Start backend
 if [ -z "$SKIP_BACKEND" ]; then
     echo "🔧 Starting backend..."
-    SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
     cd "$SCRIPT_DIR/backend"
     
     # Check if node_modules exists
@@ -85,7 +87,6 @@ fi
 if [ -z "$SKIP_FRONTEND" ]; then
     echo ""
     echo "🌐 Starting frontend..."
-    SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
     cd "$SCRIPT_DIR/frontend"
     
     # Check if node_modules exists

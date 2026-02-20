@@ -6,12 +6,12 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id                 String    @id @default(uuid())
+  id                 String    @id @default(auto()) @map("_id") @db.ObjectId
   email              String    @unique
   password           String
   role               Role      @default(STUDENT)
@@ -26,7 +26,7 @@ model User {
   frequencyUsed      Int       @default(0) // Number of visits in the last 30 days
   createdAt          DateTime  @default(now())
   updatedAt          DateTime  @updatedAt
-  
+
   entryExitLogs EntryExitLog[]
 }
 
@@ -42,13 +42,13 @@ enum Role {
 }
 
 model EntryExitLog {
-  id            String    @id @default(uuid())
-  userId        String
-  user          User      @relation(fields: [userId], references: [id])
-  type          LogType
-  timestamp     DateTime  @default(now())
-  expirationTime DateTime? // Only set for ENTRY logs (entry time + 1 hour)
-  
+  id             String     @id @default(auto()) @map("_id") @db.ObjectId
+  userId         String     @db.ObjectId
+  user           User       @relation(fields: [userId], references: [id])
+  type           LogType
+  timestamp      DateTime   @default(now())
+  expirationTime DateTime?   // Only set for ENTRY logs (entry time + 1 hour)
+
   @@index([userId, timestamp])
   @@index([expirationTime]) // For efficient expired session queries
 }
@@ -59,22 +59,22 @@ enum LogType {
 }
 
 model SystemConfig {
-  id              String   @id @default(uuid())
-  maxCapacity     Int      @default(100)
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  maxCapacity      Int      @default(100)
   currentOccupancy Int     @default(0)
-  updatedAt       DateTime @updatedAt
+  updatedAt        DateTime @updatedAt
 }
 
 model LibraryStatus {
-  id              String   @id @default(uuid())
-  status          LibraryStatusType @default(OPEN)
-  message         String?
-  isAutoScheduled Boolean  @default(false)
-  autoOpenTime    String?  // HH:MM format
-  autoCloseTime   String?  // HH:MM format
-  maintenanceMessage String?
-  updatedAt       DateTime @updatedAt
-  updatedBy       String?  // Admin user ID who updated
+  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  status              LibraryStatusType @default(OPEN)
+  message             String?
+  isAutoScheduled     Boolean  @default(false)
+  autoOpenTime        String?  // HH:MM format
+  autoCloseTime       String?  // HH:MM format
+  maintenanceMessage  String?
+  updatedAt           DateTime @updatedAt
+  updatedBy           String?  // Admin user ID who updated
 }
 
 enum LibraryStatusType {

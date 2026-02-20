@@ -6,10 +6,11 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('🌱 Starting database seeding...');
 
-  // Clear existing data
+  // Clear existing data (order: logs first due to relation, then users, then config and status)
   await prisma.entryExitLog.deleteMany();
   await prisma.user.deleteMany();
   await prisma.systemConfig.deleteMany();
+  await prisma.libraryStatus.deleteMany();
 
   // Create system configuration
   const systemConfig = await prisma.systemConfig.create({

@@ -100,9 +100,8 @@ npm run db:populate  # Optional: add more test data
 ### Full Database Reset
 
 ```bash
-# Complete reset (users + data)
+# Complete reset (MongoDB: re-seed from scratch)
 cd backend
-npx prisma migrate reset
 npm run db:seed
 ```
 
@@ -236,9 +235,12 @@ npm run db:add-active      # Make some users currently inside
 npm run db:remove-active   # Remove active users
 npm run db:reset          # Optional: Full reset
 ```
+
+### Schema sync (MongoDB)
+
 ```bash
 npx prisma generate
-npx prisma migrate deploy
+npm run db:migrate   # or: npx prisma db push
 ```
 
 ### Script runs but no data appears

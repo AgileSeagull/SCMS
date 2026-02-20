@@ -75,7 +75,7 @@ SCMS/
 │   │   ├── scripts/         # Database management scripts
 │   │   ├── utils/           # Utility functions
 │   │   └── types/            # TypeScript type definitions
-│   └── prisma/              # Database schema & migrations
+│   └── prisma/              # Database schema (MongoDB: db push, no migrations)
 ├── frontend/                # React + TypeScript SPA
 │   ├── src/
 │   │   ├── components/      # Reusable UI components
@@ -115,10 +115,10 @@ npm install
 cp env.example .env
 # Edit .env with your configuration (see Configuration section)
 
-# Set up database
+# Set up database (ensure MongoDB is running)
 npx prisma generate
-npx prisma migrate dev
-npx prisma db seed
+npm run db:migrate
+npm run db:seed
 
 # Start the backend server (or use start.sh from root)
 npm run dev
@@ -149,8 +149,10 @@ npm start
 Create a `.env` file in the `backend` directory (use `env.example` as template):
 
 ```env
-# Database
-DATABASE_URL="file:./prisma/dev.db"
+# Database (MongoDB)
+# Local: mongodb://localhost:27017/libraryflow
+# Atlas:  mongodb+srv://username:password@cluster.mongodb.net/libraryflow
+DATABASE_URL="mongodb://localhost:27017/libraryflow"
 
 # JWT Secret (generate a strong random string)
 JWT_SECRET="your-super-secret-jwt-key-here-change-in-production"
@@ -165,27 +167,18 @@ CORS_ORIGIN="http://localhost:3000"
 
 ### Database Setup
 
-The application uses SQLite by default. To use PostgreSQL:
+The application uses **MongoDB**. Ensure MongoDB is running (local or Atlas). For local MongoDB, a [replica set](https://www.mongodb.com/docs/manual/replication/) may be required for transactions; Atlas includes one by default.
 
-1. Update `DATABASE_URL` in `.env`:
+1. Set `DATABASE_URL` in `.env` (see `env.example`):
+   - **Local**: `mongodb://localhost:27017/libraryflow`
+   - **Atlas**: `mongodb+srv://username:password@cluster.mongodb.net/libraryflow`
 
-```env
-DATABASE_URL="postgresql://user:password@localhost:5432/SCMS"
-```
-
-2. Update provider in `prisma/schema.prisma`:
-
-```prisma
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
-```
-
-3. Run migrations:
+2. Push the schema and seed:
 
 ```bash
-npx prisma migrate deploy
+cd backend
+npm run db:migrate   # Pushes schema to MongoDB (prisma db push)
+npm run db:seed     # Seeds initial data
 ```
 
 ## 📊 **Database Scripts**
@@ -313,9 +306,8 @@ npm run db:remove-active
 #### Complete Reset
 
 ```bash
-# Full database reset (removes all data, users, migrations)
+# Full database reset: re-seed from scratch (MongoDB: no migrations)
 cd backend
-npx prisma migrate reset
 npm run db:seed
 ```
 
@@ -371,7 +363,7 @@ Stops both backend (port 5000) and frontend (port 3000) services.
 | **Add Active Users**    | `npm run db:add-active` (in backend/)    | Simulate active users      |
 | **Remove Active Users** | `npm run db:remove-active` (in backend/) | Remove all active users    |
 | **Seed DB**             | `npm run db:seed` (in backend/)          | Initial database seeding   |
-| **Run Migrations**      | `npm run db:migrate` (in backend/)       | Run database migrations    |
+| **Run Migrations**      | `npm run db:migrate` (in backend/)       | Push schema to MongoDB     |
 
 ## 📱 **Usage Guide**
 
@@ -404,7 +396,7 @@ Stops both backend (port 5000) and frontend (port 3000) services.
 npm run dev          # Start development server
 npm run build        # Build for production
 npm run start        # Start production server
-npm run db:migrate   # Run database migrations
+npm run db:migrate   # Push schema to MongoDB (db push)
 npm run db:generate  # Generate Prisma client
 npm run db:studio    # Open Prisma Studio (http://localhost:5555)
 npm run db:seed      # Seed database with sample data
@@ -429,11 +421,12 @@ npm run eject        # Eject from Create React App (irreversible)
 # Generate Prisma client
 npx prisma generate
 
-# Create and apply migrations
-npx prisma migrate dev
+# Push schema to MongoDB (no migrations with MongoDB)
+npm run db:migrate
+# or: npx prisma db push
 
-# Reset database (removes all data)
-npx prisma migrate reset
+# Seed or reset data (script-based; no migrate reset)
+npm run db:seed
 
 # Open Prisma Studio (GUI for database)
 npx prisma studio
