@@ -6,7 +6,7 @@ A comprehensive smart crowd management system that provides real-time occupancy 
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-blue)
 ![React](https://img.shields.io/badge/React-19.2.0-blue)
 ![Node.js](https://img.shields.io/badge/Node.js-Express-green)
-![Database](https://img.shields.io/badge/Database-SQLite-orange)
+![Database](https://img.shields.io/badge/Database-MongoDB-green)
 ![Status](https://img.shields.io/badge/Status-Production%20Ready-brightgreen)
 
 ## ▶️ Product Demo
@@ -94,6 +94,7 @@ SCMS/
 
 -   **Node.js** (v18 or higher)
 -   **npm** or **yarn**
+-   **MongoDB** (local or [Atlas](https://www.mongodb.com/atlas)); for local Docker see [Database Setup](#database-setup)
 -   **Git**
 
 ### 1. Clone the Repository
@@ -169,8 +170,45 @@ CORS_ORIGIN="http://localhost:3000"
 
 The application uses **MongoDB**. Ensure MongoDB is running (local or Atlas). For local MongoDB, a [replica set](https://www.mongodb.com/docs/manual/replication/) may be required for transactions; Atlas includes one by default.
 
+#### Setup MongoDB with Docker
+
+Run MongoDB in a container with a replica set (required for Prisma transactions):
+
+```bash
+# Start MongoDB with replica set and persistent volume
+docker run -d \
+  --name mongodb \
+  -p 27017:27017 \
+  -v mongodb_data:/data/db \
+  mongo:latest \
+  --replSet rs0
+
+# Initialize the replica set (one-time, wait a few seconds after starting)
+docker exec -it mongodb mongosh --eval "rs.initiate()"
+```
+
+In `backend/.env`, set the URL with `directConnection=true` (so the driver doesn’t try to resolve the container hostname):
+
+```env
+DATABASE_URL="mongodb://localhost:27017/libraryflow?directConnection=true"
+```
+
+Useful Docker commands:
+
+| Task | Command |
+|------|---------|
+| Stop | `docker stop mongodb` |
+| Start again | `docker start mongodb` |
+| Logs | `docker logs -f mongodb` |
+| Shell | `docker exec -it mongodb mongosh` |
+
+Data is stored in the `mongodb_data` volume and persists across container restarts.
+
+#### Other setups
+
 1. Set `DATABASE_URL` in `.env` (see `env.example`):
-   - **Local**: `mongodb://localhost:27017/libraryflow`
+   - **Local (Docker, above)**: `mongodb://localhost:27017/libraryflow?directConnection=true`
+   - **Local (native MongoDB)**: `mongodb://localhost:27017/libraryflow`
    - **Atlas**: `mongodb+srv://username:password@cluster.mongodb.net/libraryflow`
 
 2. Push the schema and seed:
@@ -659,10 +697,18 @@ npm run build
 ### Environment Setup
 
 1. Set `NODE_ENV=production`
-2. Configure production database (PostgreSQL recommended)
+2. Configure production database (MongoDB Atlas or self-hosted with replica set)
 3. Set secure JWT secret (strong random string)
 4. Configure CORS for production domain
 5. Use environment variables for all secrets
+
+## 🤝 **Contributing**
+
+Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for setup and pull request steps. Do not commit `.env` or secrets (use `env.example` as a template).
+
+## 📄 **License**
+
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
 
 ## 🙏 **Acknowledgments**
 
